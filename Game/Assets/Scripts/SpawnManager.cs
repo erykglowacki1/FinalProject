@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    public GameObject[] animalPrefabs;
+    public GameObject[] obstaclePrefabs;
     private float spawnRangeX = 10;
-    private float spawnPosZ = 10;
+    private float spawnPosZ = 100;
     private float startDelay = 2.0f;
     private float spawnInterval = 1.5f;
 
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("SpawnRandomAnimal", startDelay, spawnInterval);
+        InvokeRepeating("SpawnRandomObstacle", startDelay, spawnInterval);
 
     }
 
@@ -24,11 +24,11 @@ public class SpawnManager : MonoBehaviour
 
     }
 
-    void SpawnRandomAnimal()
+    void SpawnRandomObstacle()
     {
-        int animalIndex = Random.Range(0, animalPrefabs.Length);
+        int animalIndex = Random.Range(0, obstaclePrefabs.Length);
         Vector3 spawnPos = new Vector3(Random.Range(-spawnRangeX, spawnRangeX), 0, spawnPosZ);
-        Instantiate(animalPrefabs[animalIndex], spawnPos, animalPrefabs[animalIndex].transform.rotation);
+        Instantiate(obstaclePrefabs[animalIndex], spawnPos, obstaclePrefabs[animalIndex].transform.rotation);
 
     }
 }

@@ -712,7 +712,7 @@ Transform:
   m_GameObject: {fileID: 2060910019}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9549503, z: 631.2}
+  m_LocalPosition: {x: 0, y: 0.9549503, z: 597.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -730,7 +730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e20d02850234528932e544090566d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animalPrefabs:
+  obstaclePrefabs:
   - {fileID: 7530566024396659589, guid: 7e344f29ade134b9bb1f33e1cc9c5260, type: 3}
   - {fileID: 7530566024396659589, guid: 7e344f29ade134b9bb1f33e1cc9c5260, type: 3}
   - {fileID: 7530566024396659589, guid: 7e344f29ade134b9bb1f33e1cc9c5260, type: 3}
