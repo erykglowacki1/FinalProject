@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,8 +12,10 @@ public class PlayerController : MonoBehaviour
     public float jumpforce;
     public bool isOnGround = true;
     public float gravityModifier;
+    public bool gameOver = false;
+    public Texts texts;
+   
 
-    public GameObject projectilePrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -46,8 +49,21 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
     private void OnCollisionEnter(Collision collision)
     {
-        isOnGround = true ;
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isOnGround = true;
+
+        }
+        else if (collision.gameObject.CompareTag("Enemy"))
+        {
+            gameOver = true;
+            Debug.Log("Game Over!");
+            texts.gameoverText.gameObject.SetActive(true);
+
+        }
     }
-}
+
+    }
