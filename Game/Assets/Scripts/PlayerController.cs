@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 
     public int numberOfLanes;
     public float speed = 10.0f;
-    public float xRange = 10.0f;
+    public float xRange = 20.0f;
     private Rigidbody playerRb;
     public float jumpForce;
     public bool isOnGround = true;

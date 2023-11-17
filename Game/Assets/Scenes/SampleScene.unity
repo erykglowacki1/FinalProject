@@ -209,12 +209,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68062c25d9d6f4b43a0fbc9859ba63d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laneWidth: 3.33
-  currentLane: 2
+  laneWidth: 5
+  currentLane: 1
   numberOfLanes: 3
   speed: 10
   xRange: 10
-  jumpForce: 0
+  jumpForce: 10
   isOnGround: 1
   gravityModifier: 1
   gameOver: 0
@@ -1200,6 +1200,8 @@ MonoBehaviour:
   - {fileID: 703992778236976527, guid: 3edfce82b0f2d4cc092f12d025b3e499, type: 3}
   - {fileID: 703992778236976527, guid: 3edfce82b0f2d4cc092f12d025b3e499, type: 3}
   - {fileID: 703992778236976527, guid: 3edfce82b0f2d4cc092f12d025b3e499, type: 3}
+  - {fileID: 3088105062980632551, guid: d0825395f362f43478815397fb0a5cf7, type: 3}
+  - {fileID: 1504282075511442808, guid: 894fb8c46142a44b2ba2731a25096ab2, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
