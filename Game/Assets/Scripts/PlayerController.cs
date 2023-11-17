@@ -1,20 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
-    public float horizontalInput;
+    public float laneWidth;
+    public float currentLane;
+
+    public int numberOfLanes;
     public float speed = 10.0f;
     public float xRange = 10.0f;
     private Rigidbody playerRb;
-    public float jumpforce;
+    public float jumpForce;
     public bool isOnGround = true;
     public float gravityModifier;
     public bool gameOver = false;
     public Texts texts;
-   
 
     // Start is called before the first frame update
     void Start()
@@ -26,44 +26,52 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.x < -xRange)
+        // Get horizontal input for movement
+        float horizontalInput = Input.GetAxis("Horizontal");
+
+        // Switch lanes smoothly
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && currentLane > 0)
         {
-            transform.position = new Vector3(-xRange, transform.position.y, transform.position.z);
+            currentLane--;
         }
 
-        if (transform.position.x > xRange)
+        if (Input.GetKeyDown(KeyCode.RightArrow) && currentLane < numberOfLanes - 1)
         {
-            transform.position = new Vector3(xRange, transform.position.y, transform.position.z);
+            currentLane++;
         }
-        horizontalInput = Input.GetAxis("Horizontal");
-        transform.Translate(transform.right * Time.deltaTime * horizontalInput * speed);
 
+        // Calculate the target position based on the chosen lane
+        float targetX = currentLane * laneWidth - xRange / 2.0f;
+
+        // Move the player to the target position smoothly
+        transform.position = Vector3.Lerp(transform.position, new Vector3(targetX, transform.position.y, transform.position.z), Time.deltaTime * speed);
+
+        // Clamp the player's position within the road boundaries
+        float clampedX = Mathf.Clamp(transform.position.x, -xRange / 2.0f, xRange / 2.0f);
+        transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
+
+        // Apply horizontal movement
+        transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
+
+        // Jump logic
         if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
         {
-            playerRb.AddForce(Vector3.up * jumpforce, ForceMode.Impulse);
+            playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
-            
-
         }
-
-
     }
-
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
             isOnGround = true;
-
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
             gameOver = true;
             Debug.Log("Game Over!");
             texts.gameoverText.gameObject.SetActive(true);
-
         }
     }
-
-    }
+}

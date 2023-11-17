@@ -209,10 +209,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68062c25d9d6f4b43a0fbc9859ba63d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalInput: 0
+  laneWidth: 3.33
+  currentLane: 2
+  numberOfLanes: 3
   speed: 10
   xRange: 10
-  jumpforce: 15
+  jumpForce: 0
   isOnGround: 1
   gravityModifier: 1
   gameOver: 0
