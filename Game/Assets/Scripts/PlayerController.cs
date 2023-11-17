@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public float gravityModifier;
     public bool gameOver = false;
     public Texts texts;
+    public Button restartButton;
 
     // Start is called before the first frame update
     void Start()
@@ -72,6 +75,12 @@ public class PlayerController : MonoBehaviour
             gameOver = true;
             Debug.Log("Game Over!");
             texts.gameoverText.gameObject.SetActive(true);
+            restartButton.gameObject.SetActive(true);
         }
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
