@@ -5,12 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public float laneWidth;
-    public float currentLane;
-
-    public int numberOfLanes;
+    public int numberOfLanes = 3;
     public float speed = 10.0f;
-    public float xRange = 20.0f;
+    public float floorWidth = 20.0f;
+    public float laneWidth;
+
+    private float currentLane = 1;
     private Rigidbody playerRb;
     public float jumpForce;
     public bool isOnGround = true;
@@ -24,6 +24,9 @@ public class PlayerController : MonoBehaviour
     {
         playerRb = GetComponent<Rigidbody>();
         Physics.gravity *= gravityModifier;
+
+        // Calculate lane width based on the floor width and the number of lanes
+        laneWidth = floorWidth / numberOfLanes;
     }
 
     // Update is called once per frame
@@ -44,13 +47,13 @@ public class PlayerController : MonoBehaviour
         }
 
         // Calculate the target position based on the chosen lane
-        float targetX = currentLane * laneWidth - xRange / 2.0f;
+        float targetX = currentLane * laneWidth - floorWidth / 2.0f + laneWidth / 2.0f;
 
         // Move the player to the target position smoothly
         transform.position = Vector3.Lerp(transform.position, new Vector3(targetX, transform.position.y, transform.position.z), Time.deltaTime * speed);
 
         // Clamp the player's position within the road boundaries
-        float clampedX = Mathf.Clamp(transform.position.x, -xRange / 2.0f, xRange / 2.0f);
+        float clampedX = Mathf.Clamp(transform.position.x, -floorWidth / 2.0f + laneWidth / 2.0f, floorWidth / 2.0f - laneWidth / 2.0f);
         transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
 
         // Apply horizontal movement

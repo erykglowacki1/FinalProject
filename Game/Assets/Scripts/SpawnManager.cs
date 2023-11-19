@@ -5,13 +5,13 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     public GameObject[] obstaclePrefabs;
-    private float spawnRangeX = 7;
+    //private float spawnRangeX = 7;
     private float spawnPosZ = 100;
     private float startDelay = 2.0f;
     private float spawnInterval = 1.5f;
     private PlayerController playerControllerScript;
 
-    //private bool gameOver = false;  // Assuming you have a game over state in PlayerController
+    
 
     // Start is called before the first frame update
     void Start()
@@ -30,8 +30,12 @@ public class SpawnManager : MonoBehaviour
     {
         if (playerControllerScript.gameOver == false)
         {
+            int laneSelection = Random.Range(0, playerControllerScript.numberOfLanes);
+
             int animalIndex = Random.Range(0, obstaclePrefabs.Length);
-            Vector3 spawnPos = new Vector3(Random.Range(-spawnRangeX, spawnRangeX), 0, spawnPosZ);
+            //Vector3 spawnPos = new Vector3(Random.Range(-spawnRangeX, spawnRangeX), 0, spawnPosZ);
+            float spawnPosX = (laneSelection - 1) * playerControllerScript.laneWidth;
+            Vector3 spawnPos = new Vector3(spawnPosX, 0, spawnPosZ);
             Instantiate(obstaclePrefabs[animalIndex], spawnPos, obstaclePrefabs[animalIndex].transform.rotation);
         }
     }
