@@ -781,7 +781,7 @@ GameObject:
   - component: {fileID: 740354208}
   - component: {fileID: 740354207}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: InvincibilityText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1426,7 +1426,7 @@ MonoBehaviour:
   score: 0
   scoreText: {fileID: 1052739165}
   gameoverText: {fileID: 1052320430}
-  invincibilityText: {fileID: 0}
+  invincibilityText: {fileID: 740354207}
 --- !u!1001 &1943635786
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1442,6 +1442,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: d80c7433031fdee44bf3910c4b046ce7, type: 3}
       propertyPath: m_TagString
       value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d80c7433031fdee44bf3910c4b046ce7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d80c7433031fdee44bf3910c4b046ce7, type: 3}
       propertyPath: m_LocalScale.x
@@ -1545,9 +1549,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstaclePrefabs:
-  - {fileID: 703992778236976527, guid: 3edfce82b0f2d4cc092f12d025b3e499, type: 3}
-  - {fileID: 703992778236976527, guid: 3edfce82b0f2d4cc092f12d025b3e499, type: 3}
-  - {fileID: 703992778236976527, guid: 3edfce82b0f2d4cc092f12d025b3e499, type: 3}
+  - {fileID: 7528352919230923191, guid: 3edfce82b0f2d4cc092f12d025b3e499, type: 3}
+  - {fileID: 7528352919230923191, guid: 3edfce82b0f2d4cc092f12d025b3e499, type: 3}
+  - {fileID: 7528352919230923191, guid: 3edfce82b0f2d4cc092f12d025b3e499, type: 3}
   - {fileID: 1466845003561117993, guid: 45fe9e41eabd44331938d32b3fa3364c, type: 3}
   - {fileID: 1504282075511442808, guid: 894fb8c46142a44b2ba2731a25096ab2, type: 3}
 --- !u!1660057539 &9223372036854775807

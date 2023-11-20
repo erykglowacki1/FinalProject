@@ -53,7 +53,7 @@ public class SpawnManager : MonoBehaviour
             int obstacleIndex = Random.Range(0, obstaclePrefabs.Length);
             
             float spawnPosX = (laneSelection - 1) * playerControllerScript.laneWidth;
-            Vector3 spawnPos = new Vector3(spawnPosX, 1.5f, spawnPosZ);
+            Vector3 spawnPos = new Vector3(spawnPosX, 0.7f, spawnPosZ);
             Instantiate(obstaclePrefabs[obstacleIndex], spawnPos, obstaclePrefabs[obstacleIndex].transform.rotation);
 
 
