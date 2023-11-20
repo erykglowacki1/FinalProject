@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Texts : MonoBehaviour
 {
@@ -11,11 +12,13 @@ public class Texts : MonoBehaviour
     public TextMeshProUGUI gameoverText;
     public TextMeshProUGUI invincibilityText;
     private PlayerController PlayerControllerScript;
+    public TextMeshProUGUI menuSelect;
     
     void Start()
     {
         score = 0;
         scoreText.text = "Score: " + score;
+        PlayerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
         StartCoroutine(IncreaseScoreCoroutine());
        
     }
@@ -25,7 +28,9 @@ public class Texts : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1f);
-            UpdateScore(5);
+            if (!PlayerControllerScript.gameOver) {
+                UpdateScore(5);
+            }
         }
     }
 
@@ -47,6 +52,8 @@ public class Texts : MonoBehaviour
     public void GameOver()
     {
         gameoverText.gameObject.SetActive(true);
+        menuSelect.gameObject.SetActive(true);
+        
         // You might want to add additional game over logic here.
     }
 
@@ -56,6 +63,9 @@ public class Texts : MonoBehaviour
         invincibilityText.gameObject.SetActive(true);
         invincibilityText.text = "Invincibility: " + Mathf.Ceil(remainingTime).ToString(); 
     }
-
+    public void ReturnMenu()
+    {
+        SceneManager.LoadSceneAsync(0);
+    }
 
 }

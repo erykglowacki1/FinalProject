@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public bool gameOver = false;
     public Texts texts;
     public Button restartButton;
+    public Button returnMenuButton;
     private bool isInvincible = false;
     private float powerupDuration = 5.0f;
     private float powerupTimer;
@@ -84,7 +85,8 @@ public class PlayerController : MonoBehaviour
             if (powerupTimer <= 0)
             {
                 isInvincible = false;
-                texts.gameObject.SetActive(false);
+                texts.invincibilityText.gameObject.SetActive(false);
+                gameOver = false;
             }
         }
     }
@@ -97,12 +99,13 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
-            if (!isInvincible)
+            if (!isInvincible && !gameOver)
             {
                 gameOver = true;
                 Debug.Log("Game Over!");
                 texts.gameoverText.gameObject.SetActive(true);
                 restartButton.gameObject.SetActive(true);
+                returnMenuButton.gameObject.SetActive(true);
             }
         }
 
@@ -121,6 +124,10 @@ public class PlayerController : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void ReturnMenu()
+    {
+        SceneManager.LoadSceneAsync(0);
     }
 
     private void CollectCoin(GameObject Coin)

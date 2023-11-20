@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class MoveForward : MonoBehaviour
 {
-    private float speed = 30.0f;
+    public float speed;
     
     private PlayerController playerControllerScript;
-    private 
+    
 
     // Start is called before the first frame update
     void Start()
     {
         playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
         //speed = GameObject.Find("ObstacleManager").GetComponent<ObstacleSpeedManager>().speed;
+        SetObstacleSpeed(speed);
     }
 
    
@@ -28,5 +29,18 @@ public class MoveForward : MonoBehaviour
 
         }
     
+    }
+
+    public void SetObstacleSpeed(float initialSpeed)
+    {
+        speed = initialSpeed;
+    }
+
+    public void IncreaseSpeed(float speedIncrease)
+    {
+        speed += speedIncrease;
+    }
+    public float GetSpeed() {
+        return speed;
     }
 }

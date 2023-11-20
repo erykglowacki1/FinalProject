@@ -32,4 +32,6 @@ public class LoadGame : MonoBehaviour
     {
         Application.Quit();
     }
+
+    
 }
