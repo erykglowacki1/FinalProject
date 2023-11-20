@@ -2,6 +2,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,6 +20,10 @@ public class PlayerController : MonoBehaviour
     public bool gameOver = false;
     public Texts texts;
     public Button restartButton;
+    private bool isInvincible = false;
+    private float powerupDuration = 5.0f;
+    private float powerupTimer;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +33,7 @@ public class PlayerController : MonoBehaviour
 
         // Calculate lane width based on the floor width and the number of lanes
         laneWidth = floorWidth / numberOfLanes;
+
     }
 
     // Update is called once per frame
@@ -65,6 +72,21 @@ public class PlayerController : MonoBehaviour
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
         }
+
+
+        //Invincsibilty Timer Logic
+        if (isInvincible)
+        {
+            powerupTimer -= Time.deltaTime;
+            powerupTimer = Mathf.Max(0, powerupTimer);
+
+            texts.InvincibilityText(powerupTimer);
+            if (powerupTimer <= 0)
+            {
+                isInvincible = false;
+                texts.gameObject.SetActive(false);
+            }
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -75,15 +97,59 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
-            gameOver = true;
-            Debug.Log("Game Over!");
-            texts.gameoverText.gameObject.SetActive(true);
-            restartButton.gameObject.SetActive(true);
+            if (!isInvincible)
+            {
+                gameOver = true;
+                Debug.Log("Game Over!");
+                texts.gameoverText.gameObject.SetActive(true);
+                restartButton.gameObject.SetActive(true);
+            }
         }
+
+
+        if (collision.gameObject.CompareTag("Coin"))
+        {
+            CollectCoin(collision.gameObject);
+        }
+        else if (collision.gameObject.CompareTag("PowerUp"))
+        {
+            CollectPowerup(collision.gameObject);
+        }
+
     }
 
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    private void CollectCoin(GameObject Coin)
+    {
+        texts.score += 100;
+        Destroy(Coin);
+    }
+
+    
+    private void CollectPowerup(GameObject PowerUp)
+    {
+        StartCoroutine(ActivateInvincibility());
+        powerupTimer = powerupDuration;
+        texts.InvincibilityText(powerupTimer);
+       
+        Destroy(PowerUp);
+    }
+
+    //works with Powerup
+    IEnumerator ActivateInvincibility()
+    {
+        isInvincible = true;
+
+        // Wait for 5 seconds
+        yield return new WaitForSeconds(5.0f);
+
+        // End invincibility after 5 seconds
+        isInvincible = false;
+    }
+
+
 }

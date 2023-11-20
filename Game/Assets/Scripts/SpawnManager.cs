@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     public GameObject[] obstaclePrefabs;
-    //private float spawnRangeX = 7;
+    
     private float spawnPosZ = 100;
     private float startDelay = 2.0f;
     private float spawnInterval = 1.5f;
@@ -50,11 +50,11 @@ public class SpawnManager : MonoBehaviour
         {
             int laneSelection = Random.Range(0, playerControllerScript.numberOfLanes);
 
-            int animalIndex = Random.Range(0, obstaclePrefabs.Length);
+            int obstacleIndex = Random.Range(0, obstaclePrefabs.Length);
             
             float spawnPosX = (laneSelection - 1) * playerControllerScript.laneWidth;
             Vector3 spawnPos = new Vector3(spawnPosX, 1.5f, spawnPosZ);
-            Instantiate(obstaclePrefabs[animalIndex], spawnPos, obstaclePrefabs[animalIndex].transform.rotation);
+            Instantiate(obstaclePrefabs[obstacleIndex], spawnPos, obstaclePrefabs[obstacleIndex].transform.rotation);
 
 
 

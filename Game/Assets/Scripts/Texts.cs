@@ -5,9 +5,12 @@ using TMPro;
 
 public class Texts : MonoBehaviour
 {
-    private int score;
+    public int score;
+    
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI gameoverText;
+    public TextMeshProUGUI invincibilityText;
+    private PlayerController PlayerControllerScript;
     
     void Start()
     {
@@ -46,4 +49,13 @@ public class Texts : MonoBehaviour
         gameoverText.gameObject.SetActive(true);
         // You might want to add additional game over logic here.
     }
+
+    public void InvincibilityText(float remainingTime)
+    {
+
+        invincibilityText.gameObject.SetActive(true);
+        invincibilityText.text = "Invincibility: " + Mathf.Ceil(remainingTime).ToString(); 
+    }
+
+
 }
