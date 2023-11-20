@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - PowerUp
   - Coin
+  - ObstacleManager
   layers:
   - Default
   - TransparentFX

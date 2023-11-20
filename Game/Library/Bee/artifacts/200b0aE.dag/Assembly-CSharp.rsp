@@ -375,6 +375,7 @@
 "Assets/Scripts/FollowCamera.cs"
 "Assets/Scripts/LoadGame.cs"
 "Assets/Scripts/MoveForward.cs"
+"Assets/Scripts/ObstacleSpeedManager.cs"
 "Assets/Scripts/PlayerController.cs"
 "Assets/Scripts/SpawnManager.cs"
 "Assets/Scripts/Texts.cs"
