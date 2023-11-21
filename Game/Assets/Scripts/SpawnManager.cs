@@ -12,6 +12,8 @@ public class SpawnManager : MonoBehaviour
     private float minSpawnInterval = 0.3f;
     private float decreaseSpawnInterval = 0.2f;
 
+ 
+
     private float elapsedTime;
     private PlayerController playerControllerScript;
     private float globalSpeedIncrease = 10.0f;
@@ -26,6 +28,8 @@ public class SpawnManager : MonoBehaviour
     {
         InvokeRepeating("SpawnRandomObstacle", startDelay, spawnInterval);
         playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
+
+      
         
 
     }
@@ -47,6 +51,9 @@ public class SpawnManager : MonoBehaviour
             CancelInvoke("SpawnRandomObstacle");
             InvokeRepeating("SpawnRandomObstacle", 0.0f, spawnInterval);
         }
+
+
+        
 
     }
 
@@ -80,7 +87,7 @@ public class SpawnManager : MonoBehaviour
             // Increase the speed of each obstacle
             moveForwardScript.IncreaseSpeed(globalSpeedIncrease);
         }
-
-
     }
+
+
 }

@@ -25,6 +25,11 @@ public class PlayerController : MonoBehaviour
     private float powerupDuration = 5.0f;
     private float powerupTimer;
 
+   
+
+    private bool doubleJumpAvailable = true;
+    private float doubleJumpDuration = 5.0f; 
+    private float doubleJumpTimer = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -68,10 +73,22 @@ public class PlayerController : MonoBehaviour
         transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
 
         // Jump logic
-        if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            isOnGround = false;
+            if (isOnGround || (doubleJumpAvailable && doubleJumpTimer > 0))
+            {
+                playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z); // Reset vertical velocity
+
+                playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+                if (!isOnGround)
+                {
+                    doubleJumpAvailable = false;
+                    doubleJumpTimer = 0.0f; // Reset timer when double jumping
+                }
+
+                isOnGround = false;
+            }
         }
 
 
@@ -89,6 +106,17 @@ public class PlayerController : MonoBehaviour
                 gameOver = false;
             }
         }
+
+        if (!isOnGround && doubleJumpTimer > 0)
+        {
+            doubleJumpTimer -= Time.deltaTime;
+
+            if (doubleJumpTimer <= 0)
+            {
+                doubleJumpAvailable = false;
+                texts.doubleJumpPowerupText.gameObject.SetActive(false);
+            }
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -102,7 +130,6 @@ public class PlayerController : MonoBehaviour
             if (!isInvincible && !gameOver)
             {
                 gameOver = true;
-                Debug.Log("Game Over!");
                 texts.gameoverText.gameObject.SetActive(true);
                 restartButton.gameObject.SetActive(true);
                 returnMenuButton.gameObject.SetActive(true);
@@ -117,6 +144,10 @@ public class PlayerController : MonoBehaviour
         else if (collision.gameObject.CompareTag("PowerUp"))
         {
             CollectPowerup(collision.gameObject);
+        }
+        else if(collision.gameObject.CompareTag("Powerup2"))
+        {
+            CollectDoubleJump(collision.gameObject);
         }
 
     }
@@ -136,13 +167,13 @@ public class PlayerController : MonoBehaviour
         Destroy(Coin);
     }
 
-    
+
     private void CollectPowerup(GameObject PowerUp)
     {
         StartCoroutine(ActivateInvincibility());
         powerupTimer = powerupDuration;
         texts.InvincibilityText(powerupTimer);
-       
+
         Destroy(PowerUp);
     }
 
@@ -158,5 +189,22 @@ public class PlayerController : MonoBehaviour
         isInvincible = false;
     }
 
+
+    private void CollectDoubleJump(GameObject PowerUp)
+    {
+        StartCoroutine(ActivateDoubleJump());
+        Destroy(PowerUp);
+        texts.doubleJumpText(doubleJumpDuration);
+    }
+
+    IEnumerator ActivateDoubleJump()
+    {
+        doubleJumpAvailable = true;
+        doubleJumpTimer = doubleJumpDuration;
+
+        yield return new WaitForSeconds(doubleJumpDuration);
+
+        doubleJumpAvailable = false;
+    }
 
 }

@@ -11,7 +11,9 @@ public class Texts : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI gameoverText;
     public TextMeshProUGUI invincibilityText;
+    public TextMeshProUGUI doubleJumpPowerupText;
     private PlayerController PlayerControllerScript;
+    
     public TextMeshProUGUI menuSelect;
     
     void Start()
@@ -54,7 +56,7 @@ public class Texts : MonoBehaviour
         gameoverText.gameObject.SetActive(true);
         menuSelect.gameObject.SetActive(true);
         
-        // You might want to add additional game over logic here.
+        
     }
 
     public void InvincibilityText(float remainingTime)
@@ -63,9 +65,10 @@ public class Texts : MonoBehaviour
         invincibilityText.gameObject.SetActive(true);
         invincibilityText.text = "Invincibility: " + Mathf.Ceil(remainingTime).ToString(); 
     }
-    public void ReturnMenu()
-    {
-        SceneManager.LoadSceneAsync(0);
-    }
 
+    public void doubleJumpText(float remainingTime)
+    {
+        doubleJumpPowerupText.gameObject.SetActive(true);
+       doubleJumpPowerupText.text = "Double Jump On" + Mathf.Ceil(remainingTime).ToString();
+    }
 }
