@@ -45,26 +45,39 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    void SpawnRandomObstacle()
+   void SpawnRandomObstacle()
+{
+    if (playerControllerScript != null && !playerControllerScript.gameOver)
     {
-        if (playerControllerScript != null && !playerControllerScript.gameOver)
+        int laneSelection = Random.Range(0, playerControllerScript.numberOfLanes);
+        int obstacleIndex = Random.Range(0, obstaclePrefabs.Length);
+
+        float spawnPosX = (laneSelection - 1) * playerControllerScript.laneWidth;
+        float spawnPosY = 0.7f; // Default spawn position on the ground
+
+        // Check the obstacle type and adjust spawn position
+        if (obstaclePrefabs[obstacleIndex].CompareTag("Coin") || obstaclePrefabs[obstacleIndex].CompareTag("PowerUp"))
         {
-            int laneSelection = Random.Range(0, playerControllerScript.numberOfLanes);
-            int obstacleIndex = Random.Range(0, obstaclePrefabs.Length);
-            float spawnPosX = (laneSelection - 1) * playerControllerScript.laneWidth;
-            float spawnPosY = Random.Range(0.7f, 3.0f); // Randomly select a height for the obstacle
-            Vector3 spawnPos = new Vector3(spawnPosX, spawnPosY, spawnPosZ);
+            // Spawn coins and power-ups on the ground
+            spawnPosY = 0.0f;
+        }
+        else
+        {
+            // Randomly select a height for other obstacles
+            spawnPosY = Random.Range(0.7f, 3.0f);
+        }
 
-            GameObject newObstacle = Instantiate(obstaclePrefabs[obstacleIndex], spawnPos, obstaclePrefabs[obstacleIndex].transform.rotation);
-            MoveForward moveForwardScript = newObstacle.GetComponent<MoveForward>();
+        Vector3 spawnPos = new Vector3(spawnPosX, spawnPosY, spawnPosZ);
 
-            if (moveForwardScript != null)
-            {
-                moveForwardScript.SetObstacleSpeed(moveForwardScript.GetSpeed() + globalSpeedIncrease);
-            }
+        GameObject newObstacle = Instantiate(obstaclePrefabs[obstacleIndex], spawnPos, obstaclePrefabs[obstacleIndex].transform.rotation);
+        MoveForward moveForwardScript = newObstacle.GetComponent<MoveForward>();
+
+        if (moveForwardScript != null)
+        {
+            moveForwardScript.SetObstacleSpeed(moveForwardScript.GetSpeed() + globalSpeedIncrease);
         }
     }
-
+}
     void IncreaseObstacleSpeedGlobally()
     {
         MoveForward[] moveForwardScripts = FindObjectsOfType<MoveForward>();

@@ -147,43 +147,43 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
+{
+    if (collision.gameObject.CompareTag("Ground"))
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        isOnGround = true;
+        currentDoubleJumps = 0;  // Reset double jump count when grounded
+        if (isCrouching)
         {
-            isOnGround = true;
-            currentDoubleJumps = 0;  // Reset double jump count when grounded
-            if (isCrouching)
-            {
-                // Automatically uncrouch when landing on the ground
-                isCrouching = false;
-                Uncrouch();
-            }
-        }
-
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            if (!isInvincible && !gameOver)
-            {
-                gameOver = true;
-                texts.gameoverText.gameObject.SetActive(true);
-                restartButton.gameObject.SetActive(true);
-                returnMenuButton.gameObject.SetActive(true);
-            }
-        }
-
-        if (collision.gameObject.CompareTag("Coin"))
-        {
-            CollectCoin(collision.gameObject);
-        }
-        else if (collision.gameObject.CompareTag("PowerUp"))
-        {
-            CollectPowerup(collision.gameObject);
-        }
-        else if (collision.gameObject.CompareTag("Powerup2"))
-        {
-            CollectDoubleJump(collision.gameObject);
+            // Automatically uncrouch when landing on the ground
+            isCrouching = false;
+            Uncrouch();
         }
     }
+
+    if (collision.gameObject.CompareTag("Enemy"))
+    {
+        if (!isInvincible && !gameOver)
+        {
+            gameOver = true;
+            texts.gameoverText.gameObject.SetActive(true);
+            restartButton.gameObject.SetActive(true);
+            returnMenuButton.gameObject.SetActive(true);
+        }
+    }
+
+    if (collision.gameObject.CompareTag("Coin"))
+    {
+        CollectCoin(collision.gameObject);
+    }
+    else if (collision.gameObject.CompareTag("PowerUp"))
+    {
+        CollectPowerup(collision.gameObject);
+    }
+    else if (collision.gameObject.CompareTag("Powerup2"))
+    {
+        CollectDoubleJump(collision.gameObject);
+    }
+}
 
     public void RestartGame()
     {
