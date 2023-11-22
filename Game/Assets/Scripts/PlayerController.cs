@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour
                 {
                     doubleJumpAvailable = false;
                     doubleJumpTimer = 0.0f;
+                    texts.doubleJumpPowerupText.gameObject.SetActive(false);
                 }
 
                 isOnGround = false;

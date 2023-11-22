@@ -70,7 +70,7 @@ public class Texts : MonoBehaviour
         if (doubleJumpPowerupText != null) // Check for null reference
         {
             doubleJumpPowerupText.gameObject.SetActive(true);
-            doubleJumpPowerupText.text = "Double Jump On" + Mathf.Ceil(remainingTime).ToString();
+           
         }
     }
 }
