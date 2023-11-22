@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -25,74 +24,101 @@ public class PlayerController : MonoBehaviour
     private float powerupDuration = 5.0f;
     private float powerupTimer;
 
-   
+    private int doubleJumpCount = 1;  // Set to 1 for initial double jump ability
+    private int currentDoubleJumps = 0;  // Keep track of the number of double jumps used
 
-    private bool doubleJumpAvailable = true;
-    private float doubleJumpDuration = 5.0f; 
+    // Add these variables
+    private bool doubleJumpAvailable = false;
+    private float doubleJumpDuration = 5.0f;
     private float doubleJumpTimer = 0.0f;
 
-    // Start is called before the first frame update
+    private bool isCrouching = false;
+    private float originalHeight;
+
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         Physics.gravity *= gravityModifier;
 
-        // Calculate lane width based on the floor width and the number of lanes
         laneWidth = floorWidth / numberOfLanes;
-
+        originalHeight = transform.localScale.y;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Get horizontal input for movement
         float horizontalInput = Input.GetAxis("Horizontal");
 
-        // Switch lanes smoothly
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && currentLane > 0)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && currentLane > 0 && !isCrouching)
         {
             currentLane--;
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) && currentLane < numberOfLanes - 1)
+        if (Input.GetKeyDown(KeyCode.RightArrow) && currentLane < numberOfLanes - 1 && !isCrouching)
         {
             currentLane++;
         }
 
-        // Calculate the target position based on the chosen lane
         float targetX = currentLane * laneWidth - floorWidth / 2.0f + laneWidth / 2.0f;
-
-        // Move the player to the target position smoothly
         transform.position = Vector3.Lerp(transform.position, new Vector3(targetX, transform.position.y, transform.position.z), Time.deltaTime * speed);
 
-        // Clamp the player's position within the road boundaries
         float clampedX = Mathf.Clamp(transform.position.x, -floorWidth / 2.0f + laneWidth / 2.0f, floorWidth / 2.0f - laneWidth / 2.0f);
         transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
 
-        // Apply horizontal movement
         transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
 
-        // Jump logic
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (isOnGround || (doubleJumpAvailable && doubleJumpTimer > 0))
             {
-                playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z); // Reset vertical velocity
-
+                playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z);
                 playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
                 if (!isOnGround)
                 {
                     doubleJumpAvailable = false;
-                    doubleJumpTimer = 0.0f; // Reset timer when double jumping
+                    doubleJumpTimer = 0.0f;
                 }
 
                 isOnGround = false;
             }
         }
 
+        // Check for crouch input
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (isOnGround)
+            {
+                // Crouch if on the ground
+                isCrouching = true;
+                Crouch();
+            }
+            else if (!isOnGround && !isCrouching)
+            {
+                // Descend more quickly when crouching while in the air
+                playerRb.velocity = new Vector3(playerRb.velocity.x, -jumpForce, playerRb.velocity.z);
+                isCrouching = true;
+                Crouch();
+            }
+        }
+        else if (Input.GetKeyUp(KeyCode.DownArrow) && isCrouching)
+        {
+            // Uncrouch when crouch key is released
+            isCrouching = false;
+            Uncrouch();
+        }
 
-        //Invincsibilty Timer Logic
+        if (isCrouching)
+        {
+            // Additional actions when continuously crouching
+            // Example: Decrease speed when continuously crouching
+            speed /= 2.0f;
+        }
+        else
+        {
+            // Restore speed when not crouching
+            speed = 10.0f;
+        }
+
         if (isInvincible)
         {
             powerupTimer -= Time.deltaTime;
@@ -124,8 +150,16 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isOnGround = true;
+            currentDoubleJumps = 0;  // Reset double jump count when grounded
+            if (isCrouching)
+            {
+                // Automatically uncrouch when landing on the ground
+                isCrouching = false;
+                Uncrouch();
+            }
         }
-        else if (collision.gameObject.CompareTag("Enemy"))
+
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             if (!isInvincible && !gameOver)
             {
@@ -136,7 +170,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
         if (collision.gameObject.CompareTag("Coin"))
         {
             CollectCoin(collision.gameObject);
@@ -145,17 +178,17 @@ public class PlayerController : MonoBehaviour
         {
             CollectPowerup(collision.gameObject);
         }
-        else if(collision.gameObject.CompareTag("Powerup2"))
+        else if (collision.gameObject.CompareTag("Powerup2"))
         {
             CollectDoubleJump(collision.gameObject);
         }
-
     }
 
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
     public void ReturnMenu()
     {
         SceneManager.LoadSceneAsync(0);
@@ -167,44 +200,52 @@ public class PlayerController : MonoBehaviour
         Destroy(Coin);
     }
 
-
     private void CollectPowerup(GameObject PowerUp)
     {
         StartCoroutine(ActivateInvincibility());
         powerupTimer = powerupDuration;
         texts.InvincibilityText(powerupTimer);
-
         Destroy(PowerUp);
     }
 
-    //works with Powerup
     IEnumerator ActivateInvincibility()
     {
         isInvincible = true;
-
-        // Wait for 5 seconds
         yield return new WaitForSeconds(5.0f);
-
-        // End invincibility after 5 seconds
         isInvincible = false;
     }
-
 
     private void CollectDoubleJump(GameObject PowerUp)
     {
         StartCoroutine(ActivateDoubleJump());
         Destroy(PowerUp);
-        texts.doubleJumpText(doubleJumpDuration);
+        texts.DoubleJumpPowerupText(doubleJumpDuration);
     }
 
     IEnumerator ActivateDoubleJump()
     {
         doubleJumpAvailable = true;
         doubleJumpTimer = doubleJumpDuration;
-
         yield return new WaitForSeconds(doubleJumpDuration);
-
         doubleJumpAvailable = false;
     }
 
+    // Add these functions for crouch functionality
+    private void Crouch()
+    {
+        // Adjust the player's scale to crouch height
+        transform.localScale = new Vector3(transform.localScale.x, originalHeight / 2.0f, transform.localScale.z);
+
+        // Additional actions when crouching
+        Debug.Log("Player is crouching!");
+    }
+
+    private void Uncrouch()
+    {
+        // Restore the player's original scale
+        transform.localScale = new Vector3(transform.localScale.x, originalHeight, transform.localScale.z);
+
+        // Additional actions when uncrouching
+        Debug.Log("Player is uncrouching!");
+    }
 }

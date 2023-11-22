@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class Texts : MonoBehaviour
 {
@@ -22,7 +22,6 @@ public class Texts : MonoBehaviour
         scoreText.text = "Score: " + score;
         PlayerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
         StartCoroutine(IncreaseScoreCoroutine());
-       
     }
 
     IEnumerator IncreaseScoreCoroutine()
@@ -55,20 +54,23 @@ public class Texts : MonoBehaviour
     {
         gameoverText.gameObject.SetActive(true);
         menuSelect.gameObject.SetActive(true);
-        
-        
     }
 
     public void InvincibilityText(float remainingTime)
     {
-
-        invincibilityText.gameObject.SetActive(true);
-        invincibilityText.text = "Invincibility: " + Mathf.Ceil(remainingTime).ToString(); 
+        if (invincibilityText != null) // Check for null reference
+        {
+            invincibilityText.gameObject.SetActive(true);
+            invincibilityText.text = "Invincibility: " + Mathf.Ceil(remainingTime).ToString();
+        }
     }
 
-    public void doubleJumpText(float remainingTime)
+    public void DoubleJumpPowerupText(float remainingTime)
     {
-        doubleJumpPowerupText.gameObject.SetActive(true);
-       doubleJumpPowerupText.text = "Double Jump On" + Mathf.Ceil(remainingTime).ToString();
+        if (doubleJumpPowerupText != null) // Check for null reference
+        {
+            doubleJumpPowerupText.gameObject.SetActive(true);
+            doubleJumpPowerupText.text = "Double Jump On" + Mathf.Ceil(remainingTime).ToString();
+        }
     }
 }
