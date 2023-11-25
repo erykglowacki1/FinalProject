@@ -45,7 +45,7 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-   void SpawnRandomObstacle()
+  void SpawnRandomObstacle()
 {
     if (playerControllerScript != null && !playerControllerScript.gameOver)
     {
@@ -64,7 +64,7 @@ public class SpawnManager : MonoBehaviour
         else
         {
             // Randomly select a height for other obstacles
-            spawnPosY = Random.Range(0.7f, 3.0f);
+            spawnPosY = Random.Range(0.4f, 1.6f); // Adjust this range as needed
         }
 
         Vector3 spawnPos = new Vector3(spawnPosX, spawnPosY, spawnPosZ);
@@ -78,6 +78,7 @@ public class SpawnManager : MonoBehaviour
         }
     }
 }
+
     void IncreaseObstacleSpeedGlobally()
     {
         MoveForward[] moveForwardScripts = FindObjectsOfType<MoveForward>();
